@@ -277,13 +277,13 @@ def air_cargo_p2() -> AirCargoProblem:
         expr('At(C2, SFO)'),
         expr('In(C2, P1)'),
         expr('In(C2, P2)'),
-        expr('In(C2, P2)'),
+        expr('In(C2, P3)'),
         ###################
         expr('At(C3, JFK)'),
         expr('At(C3, SFO)'),
         expr('In(C3, P1)'),
         expr('In(C3, P2)'),
-        expr('In(C3, P2)'),
+        expr('In(C3, P3)'),
         ###################
         expr('At(P1, JFK)'),
         expr('At(P1, ATL)'),
@@ -301,7 +301,7 @@ def air_cargo_p2() -> AirCargoProblem:
 
 def air_cargo_p3() -> AirCargoProblem:
     cargos = ['C1', 'C2', 'C3', 'C4']
-    planes = ['P1', 'P2', 'P3', 'P4']
+    planes = ['P1', 'P2']
     airports = ['JFK', 'SFO', 'ATL', 'ORD']
     pos = [
         expr('At(C1, SFO)'),
