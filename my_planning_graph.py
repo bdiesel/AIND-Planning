@@ -477,8 +477,13 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         '''
-
-        # TODO test for Competing Needs between nodes
+        ''' Test for one of the preconditions of one action is
+            mutually exclusive with a precondition of the other
+        '''
+        for a1_precond in node_a1.parents:
+            for a2_precond in node_a2.parents:
+                if a1_precond.is_mutex(a2_precond):
+                    return True
         return False
 
     def update_s_mutex(self, nodeset: set):
