@@ -424,21 +424,16 @@ class PlanningGraph():
         :return: bool
         '''
         # Test for Inconsistent Effects between nodes
-        a1n = node_a1.action
-        a2n = node_a2.action
-
-        a1n_add = a1n.effect_add
-        a1n_rem = a1n.effect_rem
-
-        a2n_add = a2n.effect_add
-        a2n_rem = a2n.effect_rem
-
-        for i in filter(lambda j: j in a1n_add, a2n_rem):
-            return True
-
-        for i in filter(lambda j: j in a1n_rem, a2n_add):
-            return True
-
+        node_test_pairs = (
+            # effect a1 add ¬ a2 remove
+            (node_a1.action.effect_add, node_a2.action.effect_rem),
+            # effect a1 remove ¬ a2 add
+            (node_a1.action.effect_rem, node_a2.action.effect_add))
+        # Walk through the node test pairs.
+        for x, y in node_test_pairs:
+            # Test for inconsistent effects.
+            for i in filter(lambda j: j in x, y):
+                return True
         return False
 
     def interference_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
@@ -455,7 +450,21 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         '''
-        # TODO test for Interference between nodes
+        # Test for Interference between nodes
+        node_test_pairs = (
+            # effect a1 add ¬ a2 negative precondition
+            (node_a1.action.effect_add, node_a2.action.precond_neg),
+            # effect a1 remove ¬ a2 positive precondition
+            (node_a1.action.effect_rem, node_a2.action.precond_pos),
+            # effect a2 add ¬ a1 negative precondition
+            (node_a2.action.effect_add, node_a1.action.precond_neg),
+            # effect a2 remove ¬ a1 positive precondition
+            (node_a2.action.effect_rem, node_a1.action.precond_pos))
+        # Walk through the node test pairs.
+        for x, y in node_test_pairs:
+            # Test for mutual exclusion.
+            for i in filter(lambda j: j in x, y):
+                return True
         return False
 
     def competing_needs_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
