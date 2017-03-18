@@ -343,7 +343,7 @@ class PlanningGraph():
         :return:
             adds S nodes to the current level in self.s_levels[level]
         '''
-        # TODO add literal S level to the planning graph as described in the Russell-Norvig text
+        # Add literal S level to the planning graph as described in the Russell-Norvig text
         # 1. determine what literals to add
         # 2. connect the nodes
         # for example, every A node in the previous level has a list of S nodes in effnodes that represent the effect
@@ -423,7 +423,22 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         '''
-        # TODO test for Inconsistent Effects between nodes
+        # Test for Inconsistent Effects between nodes
+        a1n = node_a1.action
+        a2n = node_a2.action
+
+        a1n_add = a1n.effect_add
+        a1n_rem = a1n.effect_rem
+
+        a2n_add = a2n.effect_add
+        a2n_rem = a2n.effect_rem
+
+        for i in filter(lambda j: j in a1n_add, a2n_rem):
+            return True
+
+        for i in filter(lambda j: j in a1n_rem, a2n_add):
+            return True
+
         return False
 
     def interference_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
