@@ -538,8 +538,12 @@ class PlanningGraph():
         :param node_s2: PgNode_s
         :return: bool
         '''
-        # TODO test for Inconsistent Support between nodes
-        return False
+        # Test for Inconsistent Support between nodes
+        for a1_precond in node_s1.parents:
+            for a2_precond in node_s2.parents:
+                if not a1_precond.is_mutex(a2_precond):
+                    return False
+        return True
 
     def h_levelsum(self) -> int:
         '''The sum of the level costs of the individual goals (admissible if goals independent)
